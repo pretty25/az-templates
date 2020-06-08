@@ -10,11 +10,16 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
-
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+- task: AzureResourceManagerTemplateDeployment@3
+  inputs:
+    deploymentScope: 'Resource Group'
+    azureResourceManagerConnection: 'Pay-As-You-Go(dbfd76ae-a31e-4cc7-ab65-2bd977c24452)'
+    subscriptionId: 'dbfd76ae-a31e-4cc7-ab65-2bd977c24452'
+    action: 'Create Or Update Resource Group'
+    resourceGroupName: 'sptestrg01'
+    location: 'UK South'
+    templateLocation: 'Linked artifact'
+    csmFile: 'createwebapp/azuredeploy.json'
+    overrideParameters: '-projectName satp2519 -linkedTemplateUri https://raw.githubusercontent.com/Azure/azure-docs-json-samples/master/get-started-deployment/linked-template/linkedStorageAccount.json'
+    deploymentMode: 'Incremental'
+    deploymentName: 'DeployPipelineTemplate'
